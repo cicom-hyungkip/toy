@@ -24,7 +24,3 @@ new Vue({
         Grid
     }
 });
-
-
-document.getElementById("fillthis").innerHTML = getText();
-$('#fillthiswithjquery').html('Filled by Jquery!');
