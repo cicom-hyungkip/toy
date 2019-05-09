@@ -17,10 +17,8 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import '../css/site.css'
 
 
+
 new Vue({
     el: '#app',
-    render: h => h(App),
-    components: {
-        Grid
-    }
+    render: h => h(App)
 });

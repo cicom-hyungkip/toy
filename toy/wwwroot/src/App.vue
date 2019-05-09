@@ -8,31 +8,11 @@
         </div>
 
         <div id="homePage" class="mt-4" v-if="home">
-            <kendo-grid class="mt-4" :data-source="myMovies">
+            <Grid ref="grid"
+                  :data-source="myMovies"
+                  :columns="columns">
 
-                <kendo-grid-column :field="'movieName'"
-                                   :title="'Movie Name'"
-                                   :width="40"></kendo-grid-column>
-                <kendo-grid-column :field="'monthWatched'"
-                                   :title="'Month watched'"
-                                   :width="40"></kendo-grid-column>
-                <kendo-grid-column :field="'dayWatched'"
-                                   :title="'Day watched'"
-                                   :width="40"></kendo-grid-column>
-                <kendo-grid-column :field="'yearWatched'"
-                                   :title="'Year watched'"
-                                   :width="40""></kendo-grid-column>
-                <kendo-grid-column :field="'genre'"
-                                   :title="'Genre'"
-                                   :width="40"></kendo-grid-column>
-                <kendo-grid-column :field="'rating'"
-                                   :title="'Rating'"
-                                   :width="40"></kendo-grid-column>
-                <kendo-grid-column :field="'comments'"
-                                   :title="'Comments'"
-                                   :width="40"></kendo-grid-column>
-
-            </kendo-grid>
+            </Grid>
         </div>
 
         <div id="addMoviePage" class="mt-4" v-if="!home">
@@ -91,13 +71,32 @@
 </template>
 
 <script>
+    import Vue from 'vue';
+    import { Grid, GridInstaller } from '@progress/kendo-grid-vue-wrapper'
+    const textboxCell = Vue.component("textbox-cell", {
+        props: [],
+        template: `<td v-if="!dataItem['inEdit']">
+                        <button
+                            class="k-primary k-button k-grid-edit-command"
+                            @click="editHandler">
+                            Edit
+                        </button>
+                        <button
+                            class="k-button k-grid-remove-command"
+                            @click="removeHandler">
+                            Remove
+                        </button>
+                    </td>`,
+        methods: {
+        
+        }
+    })
+
+
+
+
+
 export default {
-        /*data: function () {
-            return {
-                greetings: 'hi',
-                somebody: 'help'
-            }
-        }*/
         data: function () {
             return {
                 home: true,
@@ -109,18 +108,25 @@ export default {
                 rating: 0,
                 comments: '',
 
-
-
+                columns: [
+                    { field: 'movieName', title: 'Movie Name' },
+                    { field: 'monthWatched', title: 'Month', width: '15px' },
+                    { field: 'dayWatched', title: 'Day', width: '15px' },
+                    { field: 'yearWatched', title: 'Year', width: '20px' },
+                    { field: 'genre', title: 'Genre' },
+                    { field: 'rating', title: 'Rating', width: '15px' },
+                    { field: 'comments', title: 'Comments' }
+                ],
 
                 myMovies: [{
-                    "movieName": 'Fight Club',
-                    "monthWatched": 1,
-                    "dayWatched": 5,
-                    "yearWatched": 1,
-                    "genre": 'thriller',
-                    "rating": 5,
-                    "comments": ''
-                }
+                        "movieName": 'Fight Club',
+                        "monthWatched": 1,
+                        "dayWatched": 5,
+                        "yearWatched": 1,
+                        "genre": 'thriller',
+                        "rating": 5,
+                        "comments": ''
+                    }
                 ]
             }
         },
@@ -159,6 +165,9 @@ export default {
                 this.togglePages('home');
                 this.refreshForm();
             }
+        },
+        components: {
+            Grid
         }
 
     }
