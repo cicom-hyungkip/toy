@@ -16,7 +16,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 
 import '../css/site.css'
 
-
+console.log('MADE CHANGES');
 
 new Vue({
     el: '#app',

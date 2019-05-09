@@ -15,6 +15,7 @@
             </Grid>
         </div>
 
+
         <div id="addMoviePage" class="mt-4" v-if="!home">
             <form>
                 <div class="form-group">
@@ -40,6 +41,7 @@
                     <label for="genre"><b>Genre</b></label>
                     <select class="form-control" id="genre" v-model="genre">
                         <option value="comedy">Comedy</option>
+                        <option value="action">Action</option>
                         <option value="horror">Horror</option>
                         <option value="drama">Drama</option>
                         <option value="scifi">Sci-fi</option>
@@ -110,22 +112,40 @@ export default {
 
                 columns: [
                     { field: 'movieName', title: 'Movie Name' },
-                    { field: 'monthWatched', title: 'Month', width: '15px' },
-                    { field: 'dayWatched', title: 'Day', width: '15px' },
-                    { field: 'yearWatched', title: 'Year', width: '20px' },
+                    { field: 'dateWatched', title: 'Date Watched' },
                     { field: 'genre', title: 'Genre' },
-                    { field: 'rating', title: 'Rating', width: '15px' },
+                    { field: 'rating', title: 'Rating' },
                     { field: 'comments', title: 'Comments' }
                 ],
 
-                myMovies: [{
+                myMovies: [
+                    {
                         "movieName": 'Fight Club',
-                        "monthWatched": 1,
-                        "dayWatched": 5,
-                        "yearWatched": 1,
+                        "dateWatched": '1/5/1992',
                         "genre": 'thriller',
                         "rating": 5,
-                        "comments": ''
+                        "comments": 'Great movie, would watch again'
+                    },
+                    {
+                        "movieName": 'Eternal Sunshine of the Spotless Mind',
+                        "dateWatched": '11/31/2000',
+                        "genre": 'romance',
+                        "rating": 3,
+                        "comments": 'Nostalgic but boring'
+                    },
+                    {
+                        "movieName": 'Gone Girl',
+                        "dateWatched": '3/11/2018',
+                        "genre": 'thriller',
+                        "rating": 2,
+                        "comments": 'Traumatizing'
+                    },
+                    {
+                        "movieName": 'Avengers: Endgame',
+                        "dateWatched": '4/7/2018',
+                        "genre": 'action',
+                        "rating": 4,
+                        "comments": 'Great fight scenes but it is too hectic'
                     }
                 ]
             }
@@ -143,13 +163,14 @@ export default {
             submitMovie: function () {
                 this.myMovies.push({
                     "movieName": this.movieName,
-                    "monthWatched": this.monthWatched,
-                    "dayWatched": this.dayWatched,
-                    "yearWatched": this.yearWatched,
+                    "dateWatched": this.packageDateFormat(this.monthWatched, this.dayWatched, this.yearWatched),
                     "genre": this.genre,
                     "rating": this.rating,
                     "comments": this.comments
                 })
+            },
+            packageDateFormat: function (m, d, y) {
+                return m + '/' + d + '/' + y
             },
             refreshForm: function () {
                 this.movieName = '',
