@@ -1,7 +1,16 @@
 ﻿#navbar {
-    background-color: black
+    background-color: black;
+        overflow: hidden;
 }
 
-#navbar span {
+#navbar .navbarItem {
     color: white
+}
+
+.navbarItem {
+    display: inline !important;
+}
+
+.navbarItem:hover {
+    background-color: lightseagreen;
 }

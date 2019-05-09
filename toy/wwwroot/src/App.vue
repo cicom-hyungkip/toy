@@ -1,8 +1,8 @@
 ﻿<template>
     <div>
         <div id="navbar" class="rounded mt-4">
-            <span class="p-4" @click="togglePages('home')">Home</span>
-            <span class="p-4" @click="togglePages('add')">Add</span>
+            <div class="navbarItem p-4" @click="togglePages('home')">Home</div>
+            <div class=" navbarItem p-4" @click="togglePages('add')">Add</div>
         </div>
 
         <div id="homePage" class="mt-4" v-if="home">
@@ -79,6 +79,8 @@
     export default {
         data: function () {
             return {
+                hover: false,
+
                 home: true,
                 movieName: '',
                 monthWatched: 1,
@@ -129,12 +131,15 @@
         },
         methods: {
             togglePages: function (pageName) {
+                
                 if (pageName == 'home') {
                     this.home = true;
                 }
                 if (pageName == 'add') {
                     this.home = false;
                 }
+
+                setTimeout(() => this.addDeleteButtons(), 10);
                 return;
             },
             submitMovie: function () {
