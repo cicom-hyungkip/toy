@@ -1,18 +1,17 @@
-﻿
-
-<template>
+﻿<template>
     <div>
-        <div id="navbar" class="rounded mt-4" >
+        <div id="navbar" class="rounded mt-4">
             <span class="p-4" @click="togglePages('home')">Home</span>
-            <span class="p-4" @click="togglePages('add')" >Add</span>
+            <span class="p-4" @click="togglePages('add')">Add</span>
         </div>
 
         <div id="homePage" class="mt-4" v-if="home">
-            <Grid ref="grid"
+            <Grid class="mt-4" ref="grid"
                   :data-source="myMovies"
                   :columns="columns">
 
             </Grid>
+            <input class="btn btn-danger btn-block mt-4" type="button" @click="deleteMovies()" value="Delete" />
         </div>
 
 
@@ -20,7 +19,7 @@
             <form>
                 <div class="form-group">
                     <label for="movieName"><b>Movie Name</b></label>
-                    <input type="text" id="movieName" class="form-control" v-model="movieName"/>
+                    <input type="text" id="movieName" class="form-control" v-model="movieName" />
                 </div>
                 <div class="form-group">
                     <label><b>Date watched</b></label>
@@ -64,7 +63,7 @@
                     <textarea class="form-control" id="comments" rows="3" v-model="comments"></textarea>
                 </div>
 
-                <input class="btn btn-success btn-block" type="button" @click="submitForm()" value="Submit"/>
+                <input class="btn btn-success btn-block" type="button" @click="submitForm()" value="Submit" />
             </form>
         </div>
 
@@ -75,30 +74,9 @@
 <script>
     import Vue from 'vue';
     import { Grid, GridInstaller } from '@progress/kendo-grid-vue-wrapper'
-    const textboxCell = Vue.component("textbox-cell", {
-        props: [],
-        template: `<td v-if="!dataItem['inEdit']">
-                        <button
-                            class="k-primary k-button k-grid-edit-command"
-                            @click="editHandler">
-                            Edit
-                        </button>
-                        <button
-                            class="k-button k-grid-remove-command"
-                            @click="removeHandler">
-                            Remove
-                        </button>
-                    </td>`,
-        methods: {
-        
-        }
-    })
-
-
-
-
-
-export default {
+    
+    
+    export default {
         data: function () {
             return {
                 home: true,
@@ -109,15 +87,14 @@ export default {
                 genre: '',
                 rating: 0,
                 comments: '',
-
                 columns: [
+                    { title: '', width: '40px' },
                     { field: 'movieName', title: 'Movie Name' },
                     { field: 'dateWatched', title: 'Date Watched' },
                     { field: 'genre', title: 'Genre' },
-                    { field: 'rating', title: 'Rating' },
-                    { field: 'comments', title: 'Comments' }
+                    { field: 'rating', title: 'Rating', width: '70px' },
+                    { field: 'comments', title: 'Comments' },
                 ],
-
                 myMovies: [
                     {
                         "movieName": 'Fight Club',
@@ -174,22 +151,55 @@ export default {
             },
             refreshForm: function () {
                 this.movieName = '',
-                this.monthWatched = 1,
-                this.dayWatched = 1,
-                this.yearWatched = 2019,
-                this.genre = '',
-                this.rating = 0,
-                this.comments = ''
+                    this.monthWatched = 1,
+                    this.dayWatched = 1,
+                    this.yearWatched = 2019,
+                    this.genre = '',
+                    this.rating = 0,
+                    this.comments = ''
             },
             submitForm: function () {
                 this.submitMovie();
                 this.togglePages('home');
                 this.refreshForm();
+            },
+            addDeleteButtons: function () {
+
+                for (var i = 1; i < $('tr').length; i++) {
+                    $($('tr')[i].children[0]).html('<input value="' + i + '"type="checkbox"></input>');
+                }
+            },
+            deleteMovies: function () {
+                var keepIndexes = [];
+                var temp = [];
+                for (var i = 0; i < $('input:checkbox:not(:checked)').length; i++) {
+                    keepIndexes.push(parseInt($('input:checkbox:not(:checked)')[i].value - 1));
+                }
+                
+                console.log('here is keepIndexes', keepIndexes);
+                for (var i = 0; i < keepIndexes.length; i++) {
+                    temp.push(this.myMovies[keepIndexes[i]]);
+                    
+                    //$($('tr')[deleteIndexes[i]]).html('');
+                    
+                }
+                this.myMovies = temp;
+                console.log('here is temp', temp);
             }
+            
         },
+        mounted: function () {
+            this.addDeleteButtons();
+        },
+        watch: {
+            myMovies: function () {
+                setTimeout(() => this.addDeleteButtons(), 10);
+            }
+            
+        },
+
         components: {
             Grid
         }
-
     }
 </script>
