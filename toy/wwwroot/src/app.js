@@ -20,3 +20,8 @@ new Vue({
     el: '#app',
     render: h => h(App)
 });
+
+
+
+
+module.hot.accept();

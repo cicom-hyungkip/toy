@@ -24,6 +24,10 @@ namespace toy
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseWebpackDevMiddleware(new Microsoft.AspNetCore.SpaServices.Webpack.WebpackDevMiddlewareOptions
+                {
+                    HotModuleReplacement = true
+                });
             }
             app.UseStaticFiles();
             app.UseMvc(routes =>

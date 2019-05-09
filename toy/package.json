@@ -13,6 +13,7 @@
   "devDependencies": {
     "@progress/kendo-theme-default": "^3.5.1",
     "@progress/kendo-ui": "^2019.1.424",
+    "aspnet-webpack": "^3.0.0",
     "bootstrap": "^4.3.1",
     "css-loader": "^2.1.1",
     "jquery": "^3.4.1",
@@ -24,7 +25,9 @@
     "vue-style-loader": "^4.1.2",
     "vue-template-compiler": "^2.6.10",
     "webpack": "^4.30.0",
-    "webpack-cli": "^3.3.2"
+    "webpack-cli": "^3.3.2",
+    "webpack-dev-middleware": "^3.6.2",
+    "webpack-hot-middleware": "^2.24.4"
   },
   "dependencies": {
     "@progress/kendo-grid-vue-wrapper": "^2019.1.220"
