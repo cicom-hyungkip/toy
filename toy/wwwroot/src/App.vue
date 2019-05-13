@@ -1,87 +1,169 @@
 ﻿<template>
     <div>
+
+
+
         <div id="navbar" class="rounded mt-4">
             <div class="navbarItem p-4" @click="togglePages('home')">Home</div>
             <div class=" navbarItem p-4" @click="togglePages('add')">Add</div>
         </div>
 
-        <div id="homePage" class="mt-4" v-if="home">
-            <Grid class="mt-4" ref="grid"
-                  :data-source="myMovies"
-                  :columns="columns">
 
-            </Grid>
-            <input class="btn btn-danger btn-block mt-4" type="button" @click="deleteMovies()" value="Delete" />
-        </div>
+        <!--
 
 
-        <div id="addMoviePage" class="mt-4" v-if="!home">
-            <form>
-                <div class="form-group">
-                    <label for="movieName"><b>Movie Name</b></label>
-                    <input type="text" id="movieName" class="form-control" v-model="movieName" />
-                </div>
-                <div class="form-group">
-                    <label><b>Date watched</b></label>
-                    <div class="col-md">
-                        <label for="monthWatched">Month</label>
-                        <input type="number" id="monthWatched" class="form-control" min="1" max="12" v-model="monthWatched" />
-                    </div>
-                    <div class="col-md">
-                        <label for="dayWatched">Day</label>
-                        <input type="number" id="dayWatched" class="form-control" min="1" max="31" v-model="dayWatched" />
-                    </div>
-                    <div class="col-md">
-                        <label for="yearWatched">Year</label>
-                        <input type="number" id="dayWatched" class="form-control" min="1900" max="2020" v-model="yearWatched" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="genre"><b>Genre</b></label>
-                    <select class="form-control" id="genre" v-model="genre">
-                        <option value="comedy">Comedy</option>
-                        <option value="action">Action</option>
-                        <option value="horror">Horror</option>
-                        <option value="drama">Drama</option>
-                        <option value="scifi">Sci-fi</option>
-                        <option value="romance">Romance</option>
-                        <option value="thriller">Thriller</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="rating"><b>Rating</b></label>
-                    <select class="form-control" id="rating" v-model="rating">
-                        <option value="1">1 (Lame)</option>
-                        <option value="2">2 (Mediocre)</option>
-                        <option value="3">3 (Good)</option>
-                        <option value="4">4 (Amazing)</option>
-                        <option value="5">5 (Best movie ever)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="comments"><b>Comments</b></label>
-                    <textarea class="form-control" id="comments" rows="3" v-model="comments"></textarea>
-                </div>
+    <div id="homePage" class="mt-4" v-if="home">
+        <Grid class="mt-4" ref="grid"
+              :data-source="myMovies"
+              :columns="columns">
 
-                <input class="btn btn-success btn-block" type="button" @click="submitForm()" value="Submit" />
-            </form>
-        </div>
-
+        </Grid>
+        <input class="btn btn-danger btn-block mt-4" type="button" @click="deleteMovies()" value="Delete" />
     </div>
+
+    -->
+       
+        
+        <div id="homePage" class="mt-4" v-if="home">
+
+            <kendo-datasource id="kendoData" ref="datasource1"
+
+                              :transport-read-url="'./lib/data.json'"
+                              :transport-read-data-type="'json'"
+                              :transport-update-url="'./lib/json.json'"
+                              :transport-update-data-type="'json'"
+                              :transport-destroy-url="'./lib/json.json'"
+                              :transport-destroy-data-type="'json'"
+                              :transport-create-url="'./lib/json.json'"
+                              :transport-create-data-type="'json'"
+                              :transport-parameter-map="parameterMap"
+                              :schema-model-id="'movieID'"
+                              :schema-model-fields="schemaModelFields"
+                              :batch='true'
+                              :page-size='10'>
+            </kendo-datasource>
+
+            <kendo-grid id="kendoGrid" :height="600"
+                        :data-source-ref="'datasource1'"
+                        :editable="'popup'"
+                        :pageable="true"
+                        :groupable="true"
+                        :filterable="true"
+                        :sortable="true"
+                        :edit="onEdit"
+                        :save="onSave"
+                        :saveChanges="onSaveChanges"
+
+                        :toolbar="['create']">
+                <kendo-grid-column :field="'movieName'"></kendo-grid-column>
+                <kendo-grid-column :field="'dateWatched'"
+                                   :title="'dateWatched'"
+                                   :width="120"></kendo-grid-column>
+                <kendo-grid-column :field="'genre'"
+                                   :title="'Genre'"
+                                   :width="120"></kendo-grid-column>
+                <kendo-grid-column :field="'rating'" :width="120"></kendo-grid-column>
+                <kendo-grid-column :field="'comments'" :width="120"></kendo-grid-column>
+                <kendo-grid-column :command="['edit', 'destroy']"
+                                   :title="'&nbsp;'"
+                                   :width="180"></kendo-grid-column>
+            </kendo-grid>
+        </div>
+            
+
+
+            <div id="addMoviePage" class="mt-4" v-if="!home">
+                <form>
+                    <div class="form-group">
+                        <label for="movieName"><b>Movie Name</b></label>
+                        <input v-focus type="text" id="movieName" class="form-control" v-model="movieName" required />
+                    </div>
+                    <div class="form-group">
+                        <label><b>Date watched</b></label>
+                        <div class="col-md">
+                            <label for="monthWatched">Month</label>
+                            <input type="number" id="monthWatched" class="form-control" min="1" max="12" v-model="monthWatched" />
+                        </div>
+                        <div class="col-md">
+                            <label for="dayWatched">Day</label>
+                            <input type="number" id="dayWatched" class="form-control" min="1" max="31" v-model="dayWatched" />
+                        </div>
+                        <div class="col-md">
+                            <label for="yearWatched">Year</label>
+                            <input type="number" id="dayWatched" class="form-control" min="1900" max="2020" v-model="yearWatched" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="genre"><b>Genre</b></label>
+                        <select class="form-control" id="genre" v-model="genre">
+                            <option value="comedy">Comedy</option>
+                            <option value="action">Action</option>
+                            <option value="horror">Horror</option>
+                            <option value="drama">Drama</option>
+                            <option value="scifi">Sci-fi</option>
+                            <option value="romance">Romance</option>
+                            <option value="thriller">Thriller</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="rating"><b>Rating</b></label>
+                        <select class="form-control" id="rating" v-model="rating">
+                            <option value="1">1 (Lame)</option>
+                            <option value="2">2 (Mediocre)</option>
+                            <option value="3">3 (Good)</option>
+                            <option value="4">4 (Amazing)</option>
+                            <option value="5">5 (Best movie ever)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="comments"><b>Comments</b></label>
+                        <textarea class="form-control" id="comments" rows="3" v-model="comments"></textarea>
+                    </div>
+
+                    <input class="btn btn-success btn-block" type="button" @click="submitForm()" value="Submit" />
+                </form>
+            </div>
+
+        </div>
 
 </template>
 
 <script>
     import Vue from 'vue';
-    import { Grid, GridInstaller } from '@progress/kendo-grid-vue-wrapper'
     
-    
+    import '@progress/kendo-ui';
+    import '@progress/kendo-theme-default/dist/all.css';
+
+    import { Grid, GridInstaller } from '@progress/kendo-grid-vue-wrapper';
+    import { DataSourceInstaller } from '@progress/kendo-datasource-vue-wrapper';
+
+    Vue.use(GridInstaller);
+    Vue.use(DataSourceInstaller);
+
+
+    Vue.directive('focus', {
+        inserted: function (el) {
+            el.focus()
+        }
+    });
+
     export default {
         data: function () {
             return {
-                hover: false,
+                schemaModelFields: {
+                    movieID: { editable: false, nullable: true },
+                    movieName: { type: 'string', validation: { required: true } },
+                    dateWatched: { type: 'string' },
+                    genre: { type: 'string' },
+                    rating: { type: 'number', validation: { min: 1, max: 5, required: true } },
+                },
+
+                
+
 
                 home: true,
+
+                /*
                 movieName: '',
                 monthWatched: 1,
                 dayWatched: 1,
@@ -89,6 +171,9 @@
                 genre: '',
                 rating: 0,
                 comments: '',
+                */
+
+                
                 columns: [
                     { title: '', width: '40px' },
                     { field: 'movieName', title: 'Movie Name' },
@@ -97,36 +182,40 @@
                     { field: 'rating', title: 'Rating', width: '70px' },
                     { field: 'comments', title: 'Comments' },
                 ],
+
+                
                 myMovies: [
                     {
-                        "movieName": 'Fight Club',
-                        "dateWatched": '1/5/1992',
-                        "genre": 'thriller',
+                        "movieName": "Fight Club",
+                        "dateWatched": "1/5/1992",
+                        "genre": "thriller",
                         "rating": 5,
-                        "comments": 'Great movie, would watch again'
+                        "comments": "Great movie, would watch again"
                     },
                     {
-                        "movieName": 'Eternal Sunshine of the Spotless Mind',
-                        "dateWatched": '11/31/2000',
-                        "genre": 'romance',
+                        "movieName": "Eternal Sunshine of the Spotless Mind",
+                        "dateWatched": "11/31/2000",
+                        "genre": "romance",
                         "rating": 3,
-                        "comments": 'Nostalgic but boring'
+                        "comments": "Nostalgic but boring"
                     },
                     {
-                        "movieName": 'Gone Girl',
-                        "dateWatched": '3/11/2018',
-                        "genre": 'thriller',
+                        "movieName": "Gone Girl",
+                        "dateWatched": "3/11/2018",
+                        "genre": "thriller",
                         "rating": 2,
-                        "comments": 'Traumatizing'
+                        "comments": "Traumatizing"
                     },
                     {
-                        "movieName": 'Avengers: Endgame',
-                        "dateWatched": '4/7/2018',
-                        "genre": 'action',
+                        "movieName": "Avengers: Endgame",
+                        "dateWatched": "4/7/2018",
+                        "genre": "action",
                         "rating": 4,
-                        "comments": 'Great fight scenes but it is too hectic'
+                        "comments": "Great fight scenes but it is too hectic"
                     }
                 ]
+
+
             }
         },
         methods: {
@@ -139,7 +228,8 @@
                     this.home = false;
                 }
 
-                setTimeout(() => this.addDeleteButtons(), 10);
+                
+                //setTimeout(() => this.addDeleteButtons(), 10);
                 return;
             },
             submitMovie: function () {
@@ -181,25 +271,55 @@
                     keepIndexes.push(parseInt($('input:checkbox:not(:checked)')[i].value - 1));
                 }
                 
-                console.log('here is keepIndexes', keepIndexes);
                 for (var i = 0; i < keepIndexes.length; i++) {
                     temp.push(this.myMovies[keepIndexes[i]]);
-                    
-                    //$($('tr')[deleteIndexes[i]]).html('');
-                    
+                                        
                 }
                 this.myMovies = temp;
-                console.log('here is temp', temp);
+            },
+
+
+
+
+
+            parameterMap: function (options, operation) {
+                if (operation !== 'read' && options.models) {
+                    return { models: kendo.stringify(options.models) }
+                }
+            },
+
+            onSave: function (e) {
+                console.log('INSIDE ON SAVE', e.model)
+                var edittedItem = e.model;
+                for (var i = 0; i < this.myMovies.length; i++) {
+                    if (this.myMovies[i].movieID == edittedItem.movieID) {
+                    }
+                }
+                
+                this.myMovies.push('hi');
+            },
+
+            onEdit: function () {
+                console.log('INSIDE ONEDIT')
+            },
+
+            onSaveChanges: function () {
+                console.log('INSIDE ONSAVECHANGES')
             }
+
+
+
             
         },
         mounted: function () {
-            this.addDeleteButtons();
+            //this.addDeleteButtons();
         },
         watch: {
+            /*
             myMovies: function () {
                 setTimeout(() => this.addDeleteButtons(), 10);
             }
+            */
             
         },
 

@@ -1,0 +1,34 @@
+[
+  {
+    "movieID": 1,
+    "movieName": "Fight Club",
+    "dateWatched": "1/5/1992",
+    "genre": "thriller",
+    "rating": 5,
+    "comments": "Great movie, would watch again"
+  },
+  {
+    "movieID": 2,
+    "movieName": "Eternal Sunshine of the Spotless Mind",
+    "dateWatched": "11/31/2000",
+    "genre": "romance",
+    "rating": 3,
+    "comments": "Nostalgic but boring"
+  },
+  {
+    "movieID": 3,
+    "movieName": "Gone Girl",
+    "dateWatched": "3/11/2018",
+    "genre": "thriller",
+    "rating": 2,
+    "comments": "Traumatizing"
+  },
+  {
+    "movieID": 4,
+    "movieName": "Avengers: Endgame",
+    "dateWatched": "4/7/2018",
+    "genre": "action",
+    "rating": 4,
+    "comments": "Great fight scenes but it is too hectic"
+  }
+]
