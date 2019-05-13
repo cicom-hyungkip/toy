@@ -50,11 +50,24 @@
                         :groupable="true"
                         :filterable="true"
                         :sortable="true"
+                        :reorderable="true"
+
                         :edit="onEdit"
                         :save="onSave"
                         :saveChanges="onSaveChanges"
 
-                        :toolbar="['create']">
+                        :toolbar="['create', 'excel', 'pdf']"
+                        :excel-fileName="'Export.xlsx'"
+                        :excel-filterable="true"
+                        :excel-allPages="true"
+                        
+                        :pdf-all-pages="true"
+                        :pdf-avoid-links="true"
+                        :pdf-paper-size="'A4'"
+                        :pdf-margin="{ top: '2cm', left: '1cm', right: '1cm', bottom: '1cm' }"
+                        :pdf-landscape="true"
+                        :pdf-repeat-headers="true"
+                        :pdf-scale="0.8">
                 <kendo-grid-column :field="'movieName'"></kendo-grid-column>
                 <kendo-grid-column :field="'dateWatched'"
                                    :title="'dateWatched'"

@@ -1,10 +1,11 @@
-﻿import ES6Lib from './es6codelib'
-
-import Vue from 'vue'
+﻿import Vue from 'vue'
 import App from './App.vue'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import '../css/site.css'
+
+import JSZip from 'jszip';
+window.JSZip = JSZip;
 
 new Vue({
     el: '#app',
