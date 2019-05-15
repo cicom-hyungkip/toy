@@ -1,11 +1,6 @@
 ﻿<template>
     <div>
         <div id="homePage" class="mt-4">
-
-            <!--
-                
-            
-                -->
             <kendo-datasource id="kendoData" ref="datasource1"
 
                               :transport-read-url="'./lib/data.json'"
@@ -20,10 +15,11 @@
                               :schema-model-id="'movieID'"
                               :schema-model-fields="schemaModelFields"
                               :batch='true'
-                              :page-size='10'>
+                              :page-size='10'
+                              :aggregate="aggregateDefinition">
             </kendo-datasource>
 
-            <kendo-grid id="kendoGrid" :height="600"
+            <kendo-grid id="kendoGrid" :height="673"
                         :data-source-ref="'datasource1'"
                         :editable="'popup'"
                         :pageable="true"
@@ -31,6 +27,15 @@
                         :filterable="true"
                         :sortable="true"
                         :reorderable="true"
+
+                        :mobile="true"
+                        :allowCopy="true"
+                        :selectable="true"
+                        :persist-selection="true"
+                        :column-menu="true"
+                        :navigatable="true"
+                        :no-records="true"
+
                         :edit="onEdit"
                         :save="onSave"
                         :saveChanges="onSaveChanges"
@@ -46,20 +51,31 @@
                         :pdf-repeat-headers="true"
                         :pdf-scale="0.8">
                 <kendo-grid-column :field="'movieName'"
-                                   :title="'Movie Name'"></kendo-grid-column>
+                                   :title="'Movie Name'"
+                                   :aggregates="['count']"
+                                   :footer-template="'Count: #=count#'"
+                                   :group-footer-template="'Count: #=count#'"></kendo-grid-column>
                 <kendo-grid-column :field="'dateWatched'"
                                    :title="'Date Watched'"
                                    :format="'{0:MM-dd-yyyy}'"
-                                   :width="120"></kendo-grid-column>
+                                   :width="160"
+                                   :aggregates="['max']"
+                                   :footer-template="dateFormat"
+                                   :group-footer-template="'Most Recent: #=kendo.toString(max, MM-dd-yyyy)#'">></kendo-grid-column>
                 <kendo-grid-column :field="'genre'"
                                    :title="'Genre'"
                                    :editor="genreEditor"
                                    :width="120"></kendo-grid-column>
                 <kendo-grid-column :field="'rating'"
                                    :title="'Rating'"
-                                   :width="120"></kendo-grid-column>
+                                   :width="100"
+                                   :aggregates="['average']" 
+                                   :footer-template="'Average: #=average#'"
+                                   :group-footer-template="'Average: #=average#'"></kendo-grid-column>
+                              
                 <kendo-grid-column :field="'comments'"
-                                   :title="'Comments'":width="120"></kendo-grid-column>
+                                   :title="'Comments'"
+                                   :width="150"></kendo-grid-column>
                 <kendo-grid-column :command="['edit', 'destroy']"
                                    :title="'&nbsp;'"
                                    :width="180"></kendo-grid-column>
@@ -92,6 +108,12 @@
                     rating: { type: 'number', validation: { min: 1, max: 5 } },
                     comments: { type: 'string', nullable: true }
                 },
+
+                aggregateDefinition: [
+                    { field: "rating", aggregate: "average" },
+                    { field: "dateWatched", aggregate: "max" },
+                    { field: "movieName", aggregate: "count" },
+                ],
                 
                 myMovies: [
                     {
@@ -128,6 +150,11 @@
             }
         },
         methods: {
+            dateFormat: function (e) {
+                var formattedDate = e.dateWatched.max.toISOString().split('T')[0];
+                return 'Most Recent: ' + formattedDate;
+            },
+
             genreEditor: function (container, options) {
                 $('<input id="one" data-bind="checked:genre" type="radio" name="genre" value="Comedy" checked>').appendTo(container);
                 $('<label style="margin-right: 23px" for="one">​Comedy</label>&nbsp;&nbsp;').appendTo(container);
@@ -143,6 +170,8 @@
                 $('<label style="margin-right: 23px" for="five">​Romance</label>').appendTo(container);
                 $('<input id="six" data-bind="checked:genre" type="radio" name="genre" value="Thriller">').appendTo(container);
                 $('<label style="margin-right: 23px" for="six">​Thriller</label>').appendTo(container);
+                $('<input id="seven" data-bind="checked:genre" type="radio" name="genre" value="Drama">').appendTo(container);
+                $('<label style="margin-right: 23px" for="seven">​Drama</label>').appendTo(container);
                 
             },
 

@@ -3,7 +3,7 @@
     "movieID": 1,
     "movieName": "Fight Club",
     "dateWatched": "1/5/1992",
-    "genre": "thriller",
+    "genre": "Thriller",
     "rating": 5,
     "comments": "Great movie, would watch again"
   },
@@ -11,7 +11,7 @@
     "movieID": 2,
     "movieName": "Eternal Sunshine of the Spotless Mind",
     "dateWatched": "11/22/2001",
-    "genre": "romance",
+    "genre": "Romance",
     "rating": 3,
     "comments": "Nostalgic but boring"
   },
@@ -19,16 +19,64 @@
     "movieID": 3,
     "movieName": "Gone Girl",
     "dateWatched": "3/11/2018",
-    "genre": "thriller",
+    "genre": "Thriller",
     "rating": 2,
     "comments": "Traumatizing"
   },
   {
     "movieID": 4,
     "movieName": "Avengers: Endgame",
-    "dateWatched": "4/7/2018",
-    "genre": "action",
+    "dateWatched": "2/7/2015",
+    "genre": "Action",
     "rating": 4,
     "comments": "Great fight scenes but it is too hectic"
+  },
+  {
+    "movieID": 5,
+    "movieName": "Memento",
+    "dateWatched": "5/21/2018",
+    "genre": "Drama",
+    "rating": 5,
+    "comments": "WOW!"
+  },
+  {
+    "movieID": 6,
+    "movieName": "Kill Bill",
+    "dateWatched": "1/7/2013",
+    "genre": "Action",
+    "rating": 2,
+    "comments": "Lots of blood"
+  },
+  {
+    "movieID": 7,
+    "movieName": "Budapest Hotel",
+    "dateWatched": "4/30/2018",
+    "genre": "Comedy",
+    "rating": 4,
+    "comments": "Whimsical"
+  },
+  {
+    "movieID": 8,
+    "movieName": "Iron Man",
+    "dateWatched": "12/23/1999",
+    "genre": "Action",
+    "rating": 4,
+    "comments": "Awesome CGI"
+  },
+  {
+    "movieID": 9,
+    "movieName": "Avengers: Endgame",
+    "dateWatched": "4/7/2002",
+    "genre": "Action",
+    "rating": 5,
+    "comments": "Cool"
+  },
+  {
+    "movieID": 10,
+    "movieName": "Avengers: Infinity War",
+    "dateWatched": "4/15/2012",
+    "genre": "Action",
+    "rating": 4,
+    "comments": "Loki is awesome"
   }
 ]
