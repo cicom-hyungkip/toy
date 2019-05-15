@@ -12,7 +12,4 @@ new Vue({
     render: h => h(App)
 });
 
-
-
-
 module.hot.accept();

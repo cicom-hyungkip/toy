@@ -1,31 +1,11 @@
 ﻿<template>
     <div>
+        <div id="homePage" class="mt-4">
 
-
-
-        <div id="navbar" class="rounded mt-4">
-            <div class="navbarItem p-4" @click="togglePages('home')">Home</div>
-            <div class=" navbarItem p-4" @click="togglePages('add')">Add</div>
-        </div>
-
-
-        <!--
-
-
-    <div id="homePage" class="mt-4" v-if="home">
-        <Grid class="mt-4" ref="grid"
-              :data-source="myMovies"
-              :columns="columns">
-
-        </Grid>
-        <input class="btn btn-danger btn-block mt-4" type="button" @click="deleteMovies()" value="Delete" />
-    </div>
-
-    -->
-       
-        
-        <div id="homePage" class="mt-4" v-if="home">
-
+            <!--
+                
+            
+                -->
             <kendo-datasource id="kendoData" ref="datasource1"
 
                               :transport-read-url="'./lib/data.json'"
@@ -51,16 +31,13 @@
                         :filterable="true"
                         :sortable="true"
                         :reorderable="true"
-
                         :edit="onEdit"
                         :save="onSave"
                         :saveChanges="onSaveChanges"
-
                         :toolbar="['create', 'excel', 'pdf']"
                         :excel-fileName="'Export.xlsx'"
                         :excel-filterable="true"
                         :excel-allPages="true"
-                        
                         :pdf-all-pages="true"
                         :pdf-avoid-links="true"
                         :pdf-paper-size="'A4'"
@@ -68,76 +45,27 @@
                         :pdf-landscape="true"
                         :pdf-repeat-headers="true"
                         :pdf-scale="0.8">
-                <kendo-grid-column :field="'movieName'"></kendo-grid-column>
+                <kendo-grid-column :field="'movieName'"
+                                   :title="'Movie Name'"></kendo-grid-column>
                 <kendo-grid-column :field="'dateWatched'"
-                                   :title="'dateWatched'"
+                                   :title="'Date Watched'"
+                                   :format="'{0:MM-dd-yyyy}'"
                                    :width="120"></kendo-grid-column>
                 <kendo-grid-column :field="'genre'"
                                    :title="'Genre'"
+                                   :editor="genreEditor"
                                    :width="120"></kendo-grid-column>
-                <kendo-grid-column :field="'rating'" :width="120"></kendo-grid-column>
-                <kendo-grid-column :field="'comments'" :width="120"></kendo-grid-column>
+                <kendo-grid-column :field="'rating'"
+                                   :title="'Rating'"
+                                   :width="120"></kendo-grid-column>
+                <kendo-grid-column :field="'comments'"
+                                   :title="'Comments'":width="120"></kendo-grid-column>
                 <kendo-grid-column :command="['edit', 'destroy']"
                                    :title="'&nbsp;'"
                                    :width="180"></kendo-grid-column>
             </kendo-grid>
         </div>
-            
-
-
-            <div id="addMoviePage" class="mt-4" v-if="!home">
-                <form>
-                    <div class="form-group">
-                        <label for="movieName"><b>Movie Name</b></label>
-                        <input v-focus type="text" id="movieName" class="form-control" v-model="movieName" required />
-                    </div>
-                    <div class="form-group">
-                        <label><b>Date watched</b></label>
-                        <div class="col-md">
-                            <label for="monthWatched">Month</label>
-                            <input type="number" id="monthWatched" class="form-control" min="1" max="12" v-model="monthWatched" />
-                        </div>
-                        <div class="col-md">
-                            <label for="dayWatched">Day</label>
-                            <input type="number" id="dayWatched" class="form-control" min="1" max="31" v-model="dayWatched" />
-                        </div>
-                        <div class="col-md">
-                            <label for="yearWatched">Year</label>
-                            <input type="number" id="dayWatched" class="form-control" min="1900" max="2020" v-model="yearWatched" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="genre"><b>Genre</b></label>
-                        <select class="form-control" id="genre" v-model="genre">
-                            <option value="comedy">Comedy</option>
-                            <option value="action">Action</option>
-                            <option value="horror">Horror</option>
-                            <option value="drama">Drama</option>
-                            <option value="scifi">Sci-fi</option>
-                            <option value="romance">Romance</option>
-                            <option value="thriller">Thriller</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="rating"><b>Rating</b></label>
-                        <select class="form-control" id="rating" v-model="rating">
-                            <option value="1">1 (Lame)</option>
-                            <option value="2">2 (Mediocre)</option>
-                            <option value="3">3 (Good)</option>
-                            <option value="4">4 (Amazing)</option>
-                            <option value="5">5 (Best movie ever)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="comments"><b>Comments</b></label>
-                        <textarea class="form-control" id="comments" rows="3" v-model="comments"></textarea>
-                    </div>
-
-                    <input class="btn btn-success btn-block" type="button" @click="submitForm()" value="Submit" />
-                </form>
-            </div>
-
-        </div>
+    </div>
 
 </template>
 
@@ -153,49 +81,17 @@
     Vue.use(GridInstaller);
     Vue.use(DataSourceInstaller);
 
-
-    Vue.directive('focus', {
-        inserted: function (el) {
-            el.focus()
-        }
-    });
-
     export default {
         data: function () {
             return {
                 schemaModelFields: {
                     movieID: { editable: false, nullable: true },
                     movieName: { type: 'string', validation: { required: true } },
-                    dateWatched: { type: 'string' },
-                    genre: { type: 'string' },
-                    rating: { type: 'number', validation: { min: 1, max: 5, required: true } },
+                    dateWatched: { type: 'date', format: 'mm:dd:yyyy', validation: { required: true } },
+                    genre: { type: 'string', validation: { required: true } },
+                    rating: { type: 'number', validation: { min: 1, max: 5 } },
+                    comments: { type: 'string', nullable: true }
                 },
-
-                
-
-
-                home: true,
-
-                /*
-                movieName: '',
-                monthWatched: 1,
-                dayWatched: 1,
-                yearWatched: 2019,
-                genre: '',
-                rating: 0,
-                comments: '',
-                */
-
-                
-                columns: [
-                    { title: '', width: '40px' },
-                    { field: 'movieName', title: 'Movie Name' },
-                    { field: 'dateWatched', title: 'Date Watched' },
-                    { field: 'genre', title: 'Genre' },
-                    { field: 'rating', title: 'Rating', width: '70px' },
-                    { field: 'comments', title: 'Comments' },
-                ],
-
                 
                 myMovies: [
                     {
@@ -232,68 +128,23 @@
             }
         },
         methods: {
-            togglePages: function (pageName) {
+            genreEditor: function (container, options) {
+                $('<input id="one" data-bind="checked:genre" type="radio" name="genre" value="Comedy" checked>').appendTo(container);
+                $('<label style="margin-right: 23px" for="one">​Comedy</label>&nbsp;&nbsp;').appendTo(container);
+                $('<input id="one" data-bind="checked:genre" type="radio" name="genre" value="Action" checked>').appendTo(container);
+                $('<label style="margin-right: 23px" for="one">​Action</label>').appendTo(container);
+                $('<input id="two" data-bind="checked:genre" type="radio" name="genre" value="Horror">').appendTo(container);
+                $('<label style="margin-right: 23px" for="two">​Horror</label>').appendTo(container);
+                $('<input id="three" data-bind="checked:genre" type="radio" name="genre" value="Drama">').appendTo(container);
+                $('<label style="margin-right: 23px" for="three">​Drama</label>').appendTo(container);
+                $('<input id="four" data-bind="checked:genre" type="radio" name="genre" value="Sci-fi">').appendTo(container);
+                $('<label style="margin-right: 23px" for="four">​Sci-fi</label>').appendTo(container);
+                $('<input id="five" data-bind="checked:genre" type="radio" name="genre" value="Romance">').appendTo(container);
+                $('<label style="margin-right: 23px" for="five">​Romance</label>').appendTo(container);
+                $('<input id="six" data-bind="checked:genre" type="radio" name="genre" value="Thriller">').appendTo(container);
+                $('<label style="margin-right: 23px" for="six">​Thriller</label>').appendTo(container);
                 
-                if (pageName == 'home') {
-                    this.home = true;
-                }
-                if (pageName == 'add') {
-                    this.home = false;
-                }
-
-                
-                //setTimeout(() => this.addDeleteButtons(), 10);
-                return;
             },
-            submitMovie: function () {
-                this.myMovies.push({
-                    "movieName": this.movieName,
-                    "dateWatched": this.packageDateFormat(this.monthWatched, this.dayWatched, this.yearWatched),
-                    "genre": this.genre,
-                    "rating": this.rating,
-                    "comments": this.comments
-                })
-            },
-            packageDateFormat: function (m, d, y) {
-                return m + '/' + d + '/' + y
-            },
-            refreshForm: function () {
-                this.movieName = '',
-                    this.monthWatched = 1,
-                    this.dayWatched = 1,
-                    this.yearWatched = 2019,
-                    this.genre = '',
-                    this.rating = 0,
-                    this.comments = ''
-            },
-            submitForm: function () {
-                this.submitMovie();
-                this.togglePages('home');
-                this.refreshForm();
-            },
-            addDeleteButtons: function () {
-
-                for (var i = 1; i < $('tr').length; i++) {
-                    $($('tr')[i].children[0]).html('<input value="' + i + '"type="checkbox"></input>');
-                }
-            },
-            deleteMovies: function () {
-                var keepIndexes = [];
-                var temp = [];
-                for (var i = 0; i < $('input:checkbox:not(:checked)').length; i++) {
-                    keepIndexes.push(parseInt($('input:checkbox:not(:checked)')[i].value - 1));
-                }
-                
-                for (var i = 0; i < keepIndexes.length; i++) {
-                    temp.push(this.myMovies[keepIndexes[i]]);
-                                        
-                }
-                this.myMovies = temp;
-            },
-
-
-
-
 
             parameterMap: function (options, operation) {
                 if (operation !== 'read' && options.models) {
@@ -302,39 +153,37 @@
             },
 
             onSave: function (e) {
-                console.log('INSIDE ON SAVE', e.model)
+                /*
                 var edittedItem = e.model;
                 for (var i = 0; i < this.myMovies.length; i++) {
                     if (this.myMovies[i].movieID == edittedItem.movieID) {
                     }
                 }
-                
-                this.myMovies.push('hi');
+                */
             },
 
             onEdit: function () {
-                console.log('INSIDE ONEDIT')
+                console.log('INSIDE ONEDIT');
+                
+                        
+                setTimeout(function () {
+                    $('.k-input[name="movieName"]')[0].focus();
+
+
+                    
+                    //$('.k-input[name="genre"]').replaceWith('<input data-bind="checked:genre" type="radio" name="genre" value="Action" checked>Action</input>  <input data-bind="value:genre" type="radio" name="genre" value="Horror">Horror</input>');
+                },500)
+                
+
+                  
+
             },
 
             onSaveChanges: function () {
                 console.log('INSIDE ONSAVECHANGES')
             }
-
-
-
-            
         },
-        mounted: function () {
-            //this.addDeleteButtons();
-        },
-        watch: {
-            /*
-            myMovies: function () {
-                setTimeout(() => this.addDeleteButtons(), 10);
-            }
-            */
-            
-        },
+
 
         components: {
             Grid
