@@ -61,7 +61,7 @@
                                    :width="160"
                                    :aggregates="['max']"
                                    :footer-template="dateFormat"
-                                   :group-footer-template="'Most Recent: #=kendo.toString(max, MM-dd-yyyy)#'">></kendo-grid-column>
+                                   :group-footer-template="'dateFormat'">></kendo-grid-column>
                 <kendo-grid-column :field="'genre'"
                                    :title="'Genre'"
                                    :editor="genreEditor"
